@@ -147,7 +147,28 @@ void PinWidget::leaveEvent(QEvent*)
 
 void PinWidget::mouseDoubleClickEvent(QMouseEvent*)
 {
-    closePin();
+    // Border will be on or off depending ing the mouseDoubleClick
+    onOffBorder = !onOffBorder;
+
+    // Hide the border
+    if (onOffBorder == false) {
+        this->setAttribute(Qt::WA_TranslucentBackground);
+
+        int borderRadiusWhenMarginLess = 0;
+
+        m_shadowEffect->setBlurRadius(borderRadiusWhenMarginLess);
+        setGraphicsEffect(m_shadowEffect);
+    } else {
+        // Show the border back
+        int marginLess = 7;
+        int borderRadiusWhenMarginLess = 2 * marginLess;
+
+        m_layout->setContentsMargins(
+          marginLess, marginLess, marginLess, marginLess);
+
+        m_shadowEffect->setBlurRadius(borderRadiusWhenMarginLess);
+        setGraphicsEffect(m_shadowEffect);
+    }
 }
 
 void PinWidget::mousePressEvent(QMouseEvent* e)
@@ -168,6 +189,10 @@ void PinWidget::mouseMoveEvent(QMouseEvent* e)
 
 void PinWidget::keyPressEvent(QKeyEvent* event)
 {
+
+    if (event->key() == Qt::Key_Escape) {
+        close();
+    }
     if (event->key() == Qt::Key_0) {
         m_opacity = 1.0;
     } else if (event->key() == Qt::Key_9) {

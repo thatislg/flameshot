@@ -65,7 +65,7 @@ set(RUN_IN_PLACE
 option(FLAMESHOT_DEBUG_CAPTURE "Enable mode to make debugging easier" OFF)
 option(USE_MONOCHROME_ICON "Build using monochrome icon as default" OFF)
 option(GENERATE_TS "Regenerate translation source files" OFF)
-option(USE_EXTERNAL_SINGLEAPPLICATION "Use external QtSingleApplication library" OFF)
+option(USE_EXTERNAL_SINGLEAPPLICATION "Use external QtSingleApplication library" ON)
 option(USE_LAUNCHER_ABSOLUTE_PATH "Use absolute path for the desktop launcher" ON)
 option(USE_WAYLAND_CLIPBOARD "USE KF Gui Wayland Clipboard" OFF)
 option(DISABLE_UPDATE_CHECKER "Disable check for updates" OFF)
