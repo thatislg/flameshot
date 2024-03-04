@@ -31,6 +31,7 @@ protected:
     void paintEvent(QPaintEvent* event) override;
 
 private:
+    bool onOffBorder = true;
     bool gestureEvent(QGestureEvent* event);
     bool scrollEvent(QWheelEvent* e);
     void pinchTriggered(QPinchGesture*);
