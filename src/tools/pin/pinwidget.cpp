@@ -19,11 +19,7 @@
 
 namespace {
 // Default Setting
-// constexpr int MARGIN = 7;
-// constexpr int BLUR_RADIUS = 2 * MARGIN;
-
-// New setting for border = 0
-constexpr int MARGIN = 0;
+constexpr int MARGIN = 7;
 constexpr int BLUR_RADIUS = 2 * MARGIN;
 
 constexpr qreal STEP = 0.03;
