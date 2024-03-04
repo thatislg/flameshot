@@ -153,7 +153,26 @@ void PinWidget::leaveEvent(QEvent*)
 
 void PinWidget::mouseDoubleClickEvent(QMouseEvent*)
 {
-    closePin();
+        // Border will be on or off depending ing the mouseDoubleClick
+    onOffBorder = !onOffBorder;
+
+    // Depend on the onOffBorder the Margin will be assigned
+    int borderMargin = onOffBorder ? 7 : 0;
+    int borderRadiusWhenMarginLess = borderMargin * 2;
+
+    // Execute
+    m_shadowEffect->setColor(m_baseColor);
+    m_layout->setContentsMargins(
+      borderMargin, borderMargin, borderMargin, borderMargin);
+    m_shadowEffect->setBlurRadius(borderRadiusWhenMarginLess);
+    m_shadowEffect->setOffset(0, 0);
+
+    setGraphicsEffect(m_shadowEffect);
+    setWindowOpacity(m_opacity);
+
+    // Execute update
+    m_sizeChanged = true;
+    update();
 }
 
 void PinWidget::mousePressEvent(QMouseEvent* e)
@@ -174,6 +193,10 @@ void PinWidget::mouseMoveEvent(QMouseEvent* e)
 
 void PinWidget::keyPressEvent(QKeyEvent* event)
 {
+    if (event->key() == Qt::Key_Escape || event->key() == Qt::Key_Delete) {
+        closePin();
+    }
+  
     if (event->key() == Qt::Key_0) {
         m_opacity = 1.0;
     } else if (event->key() == Qt::Key_9) {
