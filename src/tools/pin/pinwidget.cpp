@@ -344,6 +344,7 @@ void PinWidget::showContextMenu(const QPoint& pos)
       &rotateLeftAction, &QAction::triggered, this, &PinWidget::rotateLeft);
     contextMenu.addAction(&rotateLeftAction);
 
+    // Add Turn On Off Border Action to Right Mouse Click
     QAction turnOnOffBorder(tr("Turn On Off Border"), this);
     connect(
       &turnOnOffBorder, &QAction::triggered, this, &PinWidget::turnOnOffBorder);

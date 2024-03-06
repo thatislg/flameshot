@@ -22,6 +22,7 @@ private:
     QVBoxLayout* m_layout;
     QLineEdit* m_outputLabel;
     QLineEdit* m_nameEditor;
+    QLineEdit* m_startFromEditor;
     FileNameHandler* m_nameHandler;
     StrftimeChooserWidget* m_helperButtons;
     QPushButton* m_saveButton;

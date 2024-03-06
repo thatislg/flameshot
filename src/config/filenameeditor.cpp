@@ -25,6 +25,8 @@ void FileNameEditor::initLayout()
     infoLabel->setFixedHeight(20);
     m_layout->addWidget(infoLabel);
     m_layout->addWidget(m_helperButtons);
+    m_layout->addWidget(new QLabel(tr("Start from:")));
+    m_layout->addWidget(m_startFromEditor);
     m_layout->addWidget(new QLabel(tr("Edit:")));
     m_layout->addWidget(m_nameEditor);
     m_layout->addWidget(new QLabel(tr("Preview:")));
@@ -42,6 +44,9 @@ void FileNameEditor::initWidgets()
     m_nameHandler = new FileNameHandler(this);
 
     // editor
+    m_startFromEditor = new QLineEdit(this);
+    m_startFromEditor->setMaxLength(FileNameHandler::MAX_CHARACTERS);
+
     m_nameEditor = new QLineEdit(this);
     m_nameEditor->setMaxLength(FileNameHandler::MAX_CHARACTERS);
 
