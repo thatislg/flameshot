@@ -39,7 +39,7 @@ private:
 
     void rotateLeft();
     void rotateRight();
-
+    void turnOnOffBorder();
     void increaseOpacity();
     void decreaseOpacity();
 

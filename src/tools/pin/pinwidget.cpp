@@ -149,26 +149,7 @@ void PinWidget::leaveEvent(QEvent*)
 
 void PinWidget::mouseDoubleClickEvent(QMouseEvent*)
 {
-        // Border will be on or off depending ing the mouseDoubleClick
-    onOffBorder = !onOffBorder;
-
-    // Depend on the onOffBorder the Margin will be assigned
-    int borderMargin = onOffBorder ? 7 : 0;
-    int borderRadiusWhenMarginLess = borderMargin * 2;
-
-    // Execute
-    m_shadowEffect->setColor(m_baseColor);
-    m_layout->setContentsMargins(
-      borderMargin, borderMargin, borderMargin, borderMargin);
-    m_shadowEffect->setBlurRadius(borderRadiusWhenMarginLess);
-    m_shadowEffect->setOffset(0, 0);
-
-    setGraphicsEffect(m_shadowEffect);
-    setWindowOpacity(m_opacity);
-
-    // Execute update
-    m_sizeChanged = true;
-    update();
+    turnOnOffBorder();
 }
 
 void PinWidget::mousePressEvent(QMouseEvent* e)
@@ -192,7 +173,7 @@ void PinWidget::keyPressEvent(QKeyEvent* event)
     if (event->key() == Qt::Key_Escape || event->key() == Qt::Key_Delete) {
         closePin();
     }
-  
+
     if (event->key() == Qt::Key_0) {
         m_opacity = 1.0;
     } else if (event->key() == Qt::Key_9) {
@@ -239,6 +220,30 @@ void PinWidget::rotateRight()
 
     auto rotateTransform = QTransform().rotate(90);
     m_pixmap = m_pixmap.transformed(rotateTransform);
+}
+
+void PinWidget::turnOnOffBorder()
+{
+    // Border will be on or off depending ing the mouseDoubleClick
+    onOffBorder = !onOffBorder;
+
+    // Depend on the onOffBorder the Margin will be assigned
+    int borderMargin = onOffBorder ? 7 : 0;
+    int borderRadiusWhenMarginLess = borderMargin * 2;
+
+    // Execute
+    m_shadowEffect->setColor(m_baseColor);
+    m_layout->setContentsMargins(
+      borderMargin, borderMargin, borderMargin, borderMargin);
+    m_shadowEffect->setBlurRadius(borderRadiusWhenMarginLess);
+    m_shadowEffect->setOffset(0, 0);
+
+    setGraphicsEffect(m_shadowEffect);
+    setWindowOpacity(m_opacity);
+
+    // Execute update
+    m_sizeChanged = true;
+    update();
 }
 
 void PinWidget::increaseOpacity()
@@ -338,6 +343,11 @@ void PinWidget::showContextMenu(const QPoint& pos)
     connect(
       &rotateLeftAction, &QAction::triggered, this, &PinWidget::rotateLeft);
     contextMenu.addAction(&rotateLeftAction);
+
+    QAction turnOnOffBorder(tr("Turn On Off Border"), this);
+    connect(
+      &turnOnOffBorder, &QAction::triggered, this, &PinWidget::turnOnOffBorder);
+    contextMenu.addAction(&turnOnOffBorder);
 
     QAction increaseOpacityAction(tr("Increase Opacity"), this);
     connect(&increaseOpacityAction,
