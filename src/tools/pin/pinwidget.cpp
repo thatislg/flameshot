@@ -5,6 +5,7 @@
 #include <QPinchGesture>
 
 #include "pinwidget.h"
+#include "qwidget.h"
 #include "qguiappcurrentscreen.h"
 #include "screenshotsaver.h"
 #include "src/utils/confighandler.h"
@@ -16,6 +17,7 @@
 #include <QShortcut>
 #include <QVBoxLayout>
 #include <QWheelEvent>
+#include <QDebug>
 
 namespace {
 // Default Setting
@@ -56,10 +58,13 @@ PinWidget::PinWidget(const QPixmap& pixmap,
     m_label->setPixmap(m_pixmap);
     m_layout->addWidget(m_label);
 
+    // Shortcut key for closePin()
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q), this, SLOT(close()));
     new QShortcut(Qt::Key_Escape, this, SLOT(close()));
+    new QShortcut(Qt::Key_Delete, this, SLOT(closePin()));
 
     qreal devicePixelRatio = 1;
+
 #if defined(Q_OS_MACOS) || defined(Q_OS_LINUX)
     QScreen* currentScreen = QGuiAppCurrentScreen().currentScreen();
     if (currentScreen != nullptr) {
@@ -68,8 +73,11 @@ PinWidget::PinWidget(const QPixmap& pixmap,
 #endif
     const int margin =
       static_cast<int>(static_cast<double>(MARGIN) * devicePixelRatio);
+     
     QRect adjusted_pos = geometry + QMargins(margin, margin, margin, margin);
+
     setGeometry(adjusted_pos);
+
 #if defined(Q_OS_LINUX)
     setWindowFlags(Qt::X11BypassWindowManagerHint);
 #endif
@@ -103,8 +111,19 @@ void PinWidget::closePin()
     update();
     close();
 }
-bool PinWidget::scrollEvent(QWheelEvent* event)
+
+void PinWidget::enterEvent(QEvent*)
 {
+    m_shadowEffect->setColor(m_hoverColor);
+}
+
+void PinWidget::leaveEvent(QEvent*)
+{
+    m_shadowEffect->setColor(m_baseColor);
+}
+
+
+bool PinWidget::scrollEvent(QWheelEvent* event) {
     const auto phase = event->phase();
     if (phase == Qt::ScrollPhase::ScrollUpdate
 #if defined(Q_OS_LINUX) || defined(Q_OS_WINDOWS)
@@ -134,17 +153,8 @@ bool PinWidget::scrollEvent(QWheelEvent* event)
 
     m_sizeChanged = true;
     update();
+
     return true;
-}
-
-void PinWidget::enterEvent(QEvent*)
-{
-    m_shadowEffect->setColor(m_hoverColor);
-}
-
-void PinWidget::leaveEvent(QEvent*)
-{
-    m_shadowEffect->setColor(m_baseColor);
 }
 
 void PinWidget::mouseDoubleClickEvent(QMouseEvent*)
@@ -154,9 +164,11 @@ void PinWidget::mouseDoubleClickEvent(QMouseEvent*)
 
 void PinWidget::mousePressEvent(QMouseEvent* e)
 {
-    m_dragStart = e->globalPos();
-    m_offsetX = e->localPos().x() / width();
-    m_offsetY = e->localPos().y() / height();
+
+     m_dragStart = e->globalPos();
+     m_offsetX = e->localPos().x() / width();
+     m_offsetY = e->localPos().y() / height();
+
 }
 
 void PinWidget::mouseMoveEvent(QMouseEvent* e)
@@ -170,10 +182,6 @@ void PinWidget::mouseMoveEvent(QMouseEvent* e)
 
 void PinWidget::keyPressEvent(QKeyEvent* event)
 {
-    if (event->key() == Qt::Key_Escape || event->key() == Qt::Key_Delete) {
-        closePin();
-    }
-
     if (event->key() == Qt::Key_0) {
         m_opacity = 1.0;
     } else if (event->key() == Qt::Key_9) {
@@ -232,18 +240,25 @@ void PinWidget::turnOnOffBorder()
     int borderRadiusWhenMarginLess = borderMargin * 2;
 
     // Execute
+    
     m_shadowEffect->setColor(m_baseColor);
+    // QColor red(Qt::red);
+    // m_shadowEffect->setColor(red);
     m_layout->setContentsMargins(
       borderMargin, borderMargin, borderMargin, borderMargin);
+    
     m_shadowEffect->setBlurRadius(borderRadiusWhenMarginLess);
     m_shadowEffect->setOffset(0, 0);
-
     setGraphicsEffect(m_shadowEffect);
     setWindowOpacity(m_opacity);
 
     // Execute update
     m_sizeChanged = true;
     update();
+}
+
+void PinWidget::turnOnOffBorder2() {
+    onOffBorder = !onOffBorder;
 }
 
 void PinWidget::increaseOpacity()

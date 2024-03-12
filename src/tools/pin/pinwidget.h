@@ -26,20 +26,20 @@ protected:
     void keyPressEvent(QKeyEvent*) override;
     void enterEvent(QEvent*) override;
     void leaveEvent(QEvent*) override;
-
+    
     bool event(QEvent* event) override;
     void paintEvent(QPaintEvent* event) override;
 
 private:
     bool onOffBorder{ true };
     bool gestureEvent(QGestureEvent* event);
-    bool scrollEvent(QWheelEvent* e);
+    bool scrollEvent(QWheelEvent* event);
     void pinchTriggered(QPinchGesture*);
     void closePin();
-
     void rotateLeft();
     void rotateRight();
     void turnOnOffBorder();
+    void turnOnOffBorder2();
     void increaseOpacity();
     void decreaseOpacity();
 
@@ -47,6 +47,7 @@ private:
     QVBoxLayout* m_layout;
     QLabel* m_label;
     QPoint m_dragStart;
+    QPoint m_pinnedPos;
     qreal m_offsetX{}, m_offsetY{};
     QGraphicsDropShadowEffect* m_shadowEffect;
     QColor m_baseColor, m_hoverColor;
